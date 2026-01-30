@@ -1,3 +1,3 @@
 mod client;
 
-pub use client::{RegistryClient, RegistryAuth, PullOptions, ImageManifest, LayerDescriptor};
+pub use client::{ImageManifest, LayerDescriptor, PullOptions, RegistryAuth, RegistryClient};

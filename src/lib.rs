@@ -27,8 +27,8 @@ pub mod initramfs;
 pub mod registry;
 
 pub use error::{BuilderError, Result};
-pub use initramfs::{Compression, compress_archive};
-pub use registry::{RegistryAuth, RegistryClient, PullOptions};
+pub use initramfs::{compress_archive, Compression};
+pub use registry::{PullOptions, RegistryAuth, RegistryClient};
 
 use anyhow::Context;
 use image::RootfsBuilder;
@@ -119,7 +119,8 @@ impl InitramfsBuilder {
     /// * `src` - Source path on host filesystem
     /// * `dest` - Destination path inside initramfs (e.g., "/usr/bin/myagent")
     pub fn inject(mut self, src: impl Into<PathBuf>, dest: impl Into<PathBuf>) -> Self {
-        self.inject_files.push(InjectFile::new(src, dest).executable());
+        self.inject_files
+            .push(InjectFile::new(src, dest).executable());
         self
     }
 
@@ -138,10 +139,7 @@ impl InitramfsBuilder {
 
     /// Build the initramfs and write it to the output path
     pub async fn build<P: AsRef<Path>>(self, output: P) -> anyhow::Result<BuildResult> {
-        let image = self
-            .image
-            .as_ref()
-            .context("No image specified")?;
+        let image = self.image.as_ref().context("No image specified")?;
 
         info!("Building initramfs from {}", image);
 
@@ -195,7 +193,11 @@ impl InitramfsBuilder {
         let mut cpio_data = Vec::new();
         archive.write_to(&mut cpio_data)?;
 
-        info!("CPIO archive: {} entries, {} bytes uncompressed", archive.len(), cpio_data.len());
+        info!(
+            "CPIO archive: {} entries, {} bytes uncompressed",
+            archive.len(),
+            cpio_data.len()
+        );
 
         let output_size = compress_archive(&cpio_data, output.as_ref(), self.compression)?;
 
