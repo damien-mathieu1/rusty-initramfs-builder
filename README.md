@@ -5,17 +5,17 @@ A Rust CLI tool to convert Docker/OCI images into bootable initramfs for microVM
 ## Installation
 
 ```bash
-cargo install rusty-initramfs-builder
+cargo install initramfs-builder
 ```
 
 ## Quick Start
 
 ```bash
 # Build an initramfs from a Docker image
-rusty-initramfs-builder build python:3.12-alpine -o python.cpio.gz
+initramfs-builder build python:3.12-alpine -o python.cpio.gz
 
 # Inject a custom binary and init script
-rusty-initramfs-builder build python:3.12-alpine \
+initramfs-builder build python:3.12-alpine \
   --inject ./my-agent:/usr/bin/my-agent \
   --init ./init.sh \
   -o python-lambda.cpio.gz
@@ -25,7 +25,7 @@ rusty-initramfs-builder build python:3.12-alpine \
 
 ```bash
 # Build initramfs
-rusty-initramfs-builder build <IMAGE> [OPTIONS]
+initramfs-builder build <IMAGE> [OPTIONS]
 
 Options:
   -o, --output <FILE>       Output file [default: initramfs.cpio.gz]
@@ -36,10 +36,10 @@ Options:
   -c, --compression <FMT>   gzip, zstd, or none [default: gzip]
 
 # Inspect image
-rusty-initramfs-builder inspect <IMAGE>
+initramfs-builder inspect <IMAGE>
 
 # List layers
-rusty-initramfs-builder list-layers <IMAGE>
+initramfs-builder list-layers <IMAGE>
 ```
 
 ## Example init script

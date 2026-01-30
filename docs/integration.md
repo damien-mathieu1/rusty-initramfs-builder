@@ -9,7 +9,7 @@ The generated initramfs is compatible with rust-vmm based hypervisors.
 1. **Build the initramfs**
 
 ```bash
-rusty-initramfs-builder build python:3.12-alpine \
+initramfs-builder build python:3.12-alpine \
   --inject ./agent:/usr/bin/agent \
   --init ./init.sh \
   --platform-arch amd64 \
@@ -73,7 +73,7 @@ Quick test without setting up rust-vmm:
 
 ```bash
 # Build for arm64 (Apple Silicon)
-rusty-initramfs-builder build alpine:latest \
+initramfs-builder build alpine:latest \
   --platform-arch arm64 \
   -o test.cpio.gz
 
@@ -95,7 +95,7 @@ qemu-system-aarch64 \
 For x86_64:
 
 ```bash
-rusty-initramfs-builder build alpine:latest \
+initramfs-builder build alpine:latest \
   --platform-arch amd64 \
   -o test.cpio.gz
 
@@ -111,17 +111,17 @@ qemu-system-x86_64 \
 
 ```bash
 # x86_64 (Intel/AMD, AWS EC2)
-rusty-initramfs-builder build python:alpine --platform-arch amd64
+initramfs-builder build python:alpine --platform-arch amd64
 
 # arm64 (Apple Silicon, AWS Graviton)
-rusty-initramfs-builder build python:alpine --platform-arch arm64
+initramfs-builder build python:alpine --platform-arch arm64
 ```
 
 ## Optimizing image size
 
 ```bash
 # Exclude unnecessary files
-rusty-initramfs-builder build python:3.12-alpine \
+initramfs-builder build python:3.12-alpine \
   --exclude "/usr/share/doc/*" \
   --exclude "/usr/share/man/*" \
   --exclude "/var/cache/*" \
