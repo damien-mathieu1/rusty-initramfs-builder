@@ -175,7 +175,11 @@ impl RegistryClient {
     }
 
     /// Pull a specific layer and return its content as bytes
-    pub async fn pull_layer(&self, reference: &Reference, layer: &LayerDescriptor) -> Result<Vec<u8>> {
+    pub async fn pull_layer(
+        &self,
+        reference: &Reference,
+        layer: &LayerDescriptor,
+    ) -> Result<Vec<u8>> {
         debug!("Pulling layer {} ({} bytes)", layer.digest, layer.size);
 
         let _auth: OciRegistryAuth = self.auth.clone().into();

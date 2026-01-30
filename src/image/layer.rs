@@ -122,29 +122,25 @@ impl LayerExtractor {
             match entry_type {
                 tar::EntryType::Link => {
                     // Hard link - get the link target and copy instead
-                    if let Ok(link_name) = entry.link_name() {
-                        if let Some(link_target) = link_name {
-                            let source_path = target_dir.join(link_target.as_ref());
-                            if source_path.exists() {
-                                // Try hard link first, fall back to copy
-                                if fs::hard_link(&source_path, &target_path).is_err() {
-                                    fs::copy(&source_path, &target_path).ok();
-                                }
+                    if let Ok(Some(link_target)) = entry.link_name() {
+                        let source_path = target_dir.join(link_target.as_ref());
+                        if source_path.exists() {
+                            // Try hard link first, fall back to copy
+                            if fs::hard_link(&source_path, &target_path).is_err() {
+                                fs::copy(&source_path, &target_path).ok();
                             }
                         }
                     }
                 }
                 tar::EntryType::Symlink => {
                     // Symlink - create it
-                    if let Ok(link_name) = entry.link_name() {
-                        if let Some(link_target) = link_name {
-                            // Remove existing file if any
-                            if target_path.exists() || target_path.is_symlink() {
-                                fs::remove_file(&target_path).ok();
-                            }
-                            #[cfg(unix)]
-                            std::os::unix::fs::symlink(link_target.as_ref(), &target_path).ok();
+                    if let Ok(Some(link_target)) = entry.link_name() {
+                        // Remove existing file if any
+                        if target_path.exists() || target_path.is_symlink() {
+                            fs::remove_file(&target_path).ok();
                         }
+                        #[cfg(unix)]
+                        std::os::unix::fs::symlink(link_target.as_ref(), &target_path).ok();
                     }
                 }
                 _ => {

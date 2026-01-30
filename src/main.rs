@@ -131,7 +131,10 @@ fn format_size(bytes: u64) -> String {
 fn parse_inject(s: &str) -> Result<(PathBuf, PathBuf)> {
     let parts: Vec<&str> = s.splitn(2, ':').collect();
     if parts.len() != 2 {
-        anyhow::bail!("Invalid inject format '{}'. Expected format: /path/on/host:/path/in/initramfs", s);
+        anyhow::bail!(
+            "Invalid inject format '{}'. Expected format: /path/on/host:/path/in/initramfs",
+            s
+        );
     }
     Ok((PathBuf::from(parts[0]), PathBuf::from(parts[1])))
 }
@@ -154,7 +157,9 @@ async fn main() -> Result<()> {
             username,
             password_stdin,
         } => {
-            let compression: Compression = compression.parse().map_err(|e: String| anyhow::anyhow!(e))?;
+            let compression: Compression = compression
+                .parse()
+                .map_err(|e: String| anyhow::anyhow!(e))?;
 
             let auth = match (username, password_stdin) {
                 (Some(user), true) => {
@@ -270,7 +275,11 @@ async fn main() -> Result<()> {
                 );
             }
             println!();
-            println!("Total: {} layers, {}", manifest.layers.len(), format_size(manifest.total_size));
+            println!(
+                "Total: {} layers, {}",
+                manifest.layers.len(),
+                format_size(manifest.total_size)
+            );
         }
     }
 
