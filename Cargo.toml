@@ -1,0 +1,43 @@
+[package]
+name = "initramfs-builder"
+version = "0.1.0"
+edition = "2021"
+authors = ["Damien"]
+description = "Convert Docker/OCI images to bootable initramfs for microVMs"
+license = "MIT"
+keywords = ["initramfs", "docker", "oci", "microvm", "lambda"]
+categories = ["command-line-utilities", "virtualization"]
+repository = "https://github.com/damien/initramfs-builder"
+documentation = "https://docs.rs/initramfs-builder"
+readme = "README.md"
+exclude = ["*.cpio.gz", "*.cpio", "vmlinux*", "test-*"]
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+clap = { version = "4", features = ["derive"] }
+oci-distribution = "0.11"
+tar = "0.4"
+flate2 = "1.0"
+zstd = "0.13"
+anyhow = "1.0"
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+indicatif = "0.17"
+glob = "0.3"
+tempfile = "3"
+futures = "0.3"
+walkdir = "2"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[[bin]]
+name = "initramfs-builder"
+path = "src/main.rs"
+
+[lib]
+name = "initramfs_builder"
+path = "src/lib.rs"
