@@ -48,7 +48,28 @@ initramfs-builder inspect <IMAGE>
 
 # List layers
 initramfs-builder list-layers <IMAGE>
+
+# Interactive wizard (TUI)
+initramfs-builder interactive
 ```
+
+### Interactive Mode
+
+The interactive wizard guides you through building an initramfs:
+
+```
+Language → Image → Summary (Quick mode, 3 steps)
+```
+
+**Keyboard controls:**
+- `↑↓` Select option
+- `←→` Change version (Language screen)
+- `Enter` Confirm / Next
+- `Esc` Back / Cancel
+- `a` Advanced options (from Summary)
+- `q` Quit
+
+**Advanced mode** adds: Architecture, Inject, Init, Compression screens.
 
 ## Example init script
 
