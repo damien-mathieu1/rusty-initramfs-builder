@@ -6,6 +6,8 @@ use std::io::{self, BufRead};
 use std::path::PathBuf;
 use tracing_subscriber::EnvFilter;
 
+mod tui;
+
 #[derive(Parser)]
 #[command(name = "initramfs-builder")]
 #[command(author, version, about = "Convert Docker/OCI images to bootable initramfs", long_about = None)]
@@ -89,6 +91,9 @@ enum Commands {
         #[arg(long, default_value = "amd64")]
         platform_arch: String,
     },
+
+    /// Launch interactive TUI wizard
+    Interactive,
 }
 
 fn setup_logging(verbose: bool) {
@@ -280,6 +285,10 @@ async fn main() -> Result<()> {
                 manifest.layers.len(),
                 format_size(manifest.total_size)
             );
+        }
+
+        Commands::Interactive => {
+            tui::run().await?;
         }
     }
 
