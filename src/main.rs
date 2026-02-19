@@ -18,6 +18,8 @@ struct Cli {
     verbose: bool,
 }
 
+mod tui;
+
 #[derive(Subcommand)]
 enum Commands {
     /// Build an initramfs from a Docker/OCI image
@@ -89,6 +91,9 @@ enum Commands {
         #[arg(long, default_value = "amd64")]
         platform_arch: String,
     },
+
+    /// Interactive mode (TUI)
+    Interactive,
 }
 
 fn setup_logging(verbose: bool) {
@@ -142,7 +147,6 @@ fn parse_inject(s: &str) -> Result<(PathBuf, PathBuf)> {
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
-    setup_logging(cli.verbose);
 
     match cli.command {
         Commands::Build {
@@ -157,6 +161,7 @@ async fn main() -> Result<()> {
             username,
             password_stdin,
         } => {
+            setup_logging(cli.verbose);
             let compression: Compression = compression
                 .parse()
                 .map_err(|e: String| anyhow::anyhow!(e))?;
@@ -235,6 +240,7 @@ async fn main() -> Result<()> {
             platform_os,
             platform_arch,
         } => {
+            setup_logging(cli.verbose);
             let client = RegistryClient::new(RegistryAuth::Anonymous);
             let reference = RegistryClient::parse_reference(&image)?;
             let options = initramfs_builder::PullOptions {
@@ -255,6 +261,7 @@ async fn main() -> Result<()> {
             platform_os,
             platform_arch,
         } => {
+            setup_logging(cli.verbose);
             let client = RegistryClient::new(RegistryAuth::Anonymous);
             let reference = RegistryClient::parse_reference(&image)?;
             let options = initramfs_builder::PullOptions {
@@ -275,11 +282,11 @@ async fn main() -> Result<()> {
                 );
             }
             println!();
-            println!(
-                "Total: {} layers, {}",
-                manifest.layers.len(),
-                format_size(manifest.total_size)
-            );
+            println!("{}", format_size(manifest.total_size));
+        }
+
+        Commands::Interactive => {
+            tui::run().await?;
         }
     }
 

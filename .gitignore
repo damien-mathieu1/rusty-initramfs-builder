@@ -4,3 +4,7 @@ Cargo.lock
 # macOS
 .DS_Store
 **/.DS_Store
+
+# Build artifacts
+*.cpio.gz
+vmlinuz*
