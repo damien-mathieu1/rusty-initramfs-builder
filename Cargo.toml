@@ -30,6 +30,8 @@ glob = "0.3"
 tempfile = "3"
 futures = "0.3"
 walkdir = "2"
+ratatui = "0.30.0"
+crossterm = "0.29.0"
 
 [dev-dependencies]
 tokio-test = "0.4"
